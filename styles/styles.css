@@ -1,0 +1,58 @@
+body {
+    font-family: Arial, sans-serif;
+    background: #f4f6f8;
+    padding: 40px;
+}
+
+h1 {
+    color: #333;
+}
+
+table {
+    border-collapse: collapse;
+    width: 60%;
+    background: white;
+}
+
+th, td {
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+}
+
+th {
+    background: #007acc;
+    color: white;
+}
+
+form {
+    background: white;
+    padding: 20px;
+    width: 300px;
+}
+
+label {
+    display: block;
+    margin-top: 10px;
+}
+
+select, button {
+    width: 100%;
+    padding: 8px;
+    margin-top: 5px;
+}
+
+button {
+    background: #007acc;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+.button {
+    display: inline-block;
+    margin-top: 20px;
+    padding: 10px 15px;
+    background: #007acc;
+    color: white;
+    text-decoration: none;
+}
