@@ -1,6 +1,6 @@
 body {
     font-family: Arial, sans-serif;
-    background: #f4f6f8;
+    background: #f2f4f7;
     padding: 40px;
 }
 
@@ -10,8 +10,9 @@ h1 {
 
 table {
     border-collapse: collapse;
-    width: 60%;
+    width: 70%;
     background: white;
+    margin-bottom: 20px;
 }
 
 th, td {
@@ -20,19 +21,19 @@ th, td {
 }
 
 th {
-    background: #007acc;
+    background: #0066cc;
     color: white;
 }
 
 form {
     background: white;
     padding: 20px;
-    width: 300px;
+    width: 320px;
 }
 
 label {
-    display: block;
     margin-top: 10px;
+    display: block;
 }
 
 select, button {
@@ -42,7 +43,7 @@ select, button {
 }
 
 button {
-    background: #007acc;
+    background: #0066cc;
     color: white;
     border: none;
     cursor: pointer;
@@ -50,9 +51,8 @@ button {
 
 .button {
     display: inline-block;
-    margin-top: 20px;
     padding: 10px 15px;
-    background: #007acc;
+    background: #0066cc;
     color: white;
     text-decoration: none;
 }

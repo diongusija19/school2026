@@ -1,12 +1,22 @@
 <?php
-$host = "localhost";
-$user = "root";
-$password = "";
-$dbname = "school_db";
+    $host = "localhost";
+    $db = "school_db";
+    $user = "root";
+    $pass = "";
 
-$con = new mysqli($host, $user, $password, $dbname);
+    $charset = "utf8mb4";
 
-if ($con->connect_error) {
-    die("Connection failed: " . $con->connect_error);
-}
+    $dsn = "mysql:host=$host;dbname=$db;charset=$charset";
+
+    $options = [
+        PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+        PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+    ];
+
+    try {
+        $pdo = new PDO($dsn, $user, $pass, $options);
+    }
+    catch (PDOException $e) {
+        die("Database connectioned failed: " . $e->getMessage());
+    }
 ?>

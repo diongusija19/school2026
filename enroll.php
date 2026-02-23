@@ -1,57 +1,54 @@
 <?php
-require "db.php";
+    session_start();
+    
+    $student_id = filter_input(INPUT_POST, 'studentID', FILTER_VALIDATE_INT);
+    $course_id = filter_input(INPUT_POST, 'courseID', FILTER_VALIDATE_INT);
 
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $student_id = $_POST["student_id"];
-    $course_id = $_POST["course_id"];
+    require_once('db.php');
+    
+    // Add Enrollment
 
-    $stmt = $con->prepare(
-        "INSERT IGNORE INTO enrollments (student_id, course_id) VALUES (?, ?)"
-    );
-    $stmt->bind_param("ii", $student_id, $course_id);
-    $stmt->execute();
+    $query = 'INSERT INTO enrollments (studentID, courseID) 
+        VALUES (:studentID, :courseID)';
 
-    header("Location: index.php");
-    exit;
-}
+    $statement = $pdo->prepare($query);
+    $statement->bindValue(':studentID', $student_id);
+    $statement->bindValue(':courseID', $course_id);
+    $statement->execute();
+    $statement->closeCursor();
 
-$students = $con->query("SELECT * FROM students");
-$courses = $con->query("SELECT * FROM courses");
+    $sql = "
+    SELECT studentID, firstName, lastName
+    FROM students
+    WHERE studentID = :studentID
+    ";    
+
+    $stmt = $pdo->prepare($sql);
+    $stmt->bindValue(':studentID', $student_id);
+    $stmt->execute();    
+    
+    $student = $stmt->fetch();
+    
+    $stmt->closeCursor();
+
+    $sql = "
+    SELECT courseID, title, code
+    FROM courses
+    WHERE courseID = :courseID
+    ";    
+
+    $stmt = $pdo->prepare($sql);
+    $stmt->bindValue(':courseID', $course_id);
+    $stmt->execute();    
+    
+    $course = $stmt->fetch();
+    
+    $stmt->closeCursor();
+
+    $_SESSION["studentName"] = $student['firstName'] . " " . $student['lastName'];
+    $_SESSION["courseName"] = $course['code'] . " - " . $course['title'];
+    $url = "enroll_confirmation.php";
+    header("Location: " . $url);
+    die();
+
 ?>
-
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Enroll Student</title>
-    <link rel="stylesheet" href="styles/styles.css">
-</head>
-<body>
-
-<h1>Enroll Student in Course</h1>
-
-<form method="post">
-    <label>Student:</label>
-    <select name="student_id">
-        <?php while ($s = $students->fetch_assoc()): ?>
-            <option value="<?= $s['student_id'] ?>">
-                <?= htmlspecialchars($s['name']) ?>
-            </option>
-        <?php endwhile; ?>
-    </select>
-
-    <label>Course:</label>
-    <select name="course_id">
-        <?php while ($c = $courses->fetch_assoc()): ?>
-            <option value="<?= $c['course_id'] ?>">
-                <?= htmlspecialchars($c['title']) ?>
-            </option>
-        <?php endwhile; ?>
-    </select>
-
-    <button type="submit">Enroll</button>
-</form>
-
-<a href="index.php">Back</a>
-
-</body>
-</html>

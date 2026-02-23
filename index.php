@@ -1,42 +1,51 @@
 <?php
-require "db.php";
+    require "db.php";
 
-$query = "
-SELECT students.name AS student, courses.title AS course
-FROM enrollments
-JOIN students ON enrollments.student_id = students.student_id
-JOIN courses ON enrollments.course_id = courses.course_id
-ORDER BY students.name
-";
+    $sql = "
+    SELECT s.firstName, s.lastName, c.title, c.code
+    FROM enrollments e
+    JOIN students s ON e.studentID = s.studentID
+    JOIN courses c ON e.courseID = c.courseID
+    ORDER BY s.lastName, s.firstName
+    ";    
 
-$result = $con->query($query);
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute();    
+    
+    $enrollments = $stmt->fetchAll();
+    
+    $stmt->closeCursor();
+
+    
 ?>
 
 <!DOCTYPE html>
 <html>
-<head>
-    <title>Student Enrollments</title>
-    <link rel="stylesheet" href="styles/styles.css">
-</head>
-<body>
+    <head>
+        <title>Student Enrollments - Home</title>
+        <link rel="stylesheet" href="styles/styles.css" />
+    </head>
+    <body>
+        <h1>Student Enrollments</h1>
 
-<h1>Student Enrollments</h1>
+        <table>
+            <tr>
+                <th>Student</th>
+                <th>Course</th>
+                <th>Code</th>
+            </tr>
 
-<table>
-    <tr>
-        <th>Student</th>
-        <th>Course</th>
-    </tr>
+            <?php foreach ($enrollments as $enrollment): ?>
+                <tr>
+                    <td><?php echo htmlspecialchars($enrollment['firstName'] . " " . $enrollment['lastName']) ?>
+                    <td><?php echo htmlspecialchars($enrollment['title']) ?>
+                    <td><?php echo htmlspecialchars($enrollment['code']) ?>
+                </tr>
+            <?php endforeach; ?>
 
-    <?php while ($row = $result->fetch_assoc()): ?>
-    <tr>
-        <td><?= htmlspecialchars($row['student']) ?></td>
-        <td><?= htmlspecialchars($row['course']) ?></td>
-    </tr>
-    <?php endwhile; ?>
-</table>
+        </table>
 
-<a href="enroll.php" class="button">Enroll Student</a>
+        <a class="button" href="enroll_form.php">Enroll a Student</a>
 
-</body>
+    </body>
 </html>
